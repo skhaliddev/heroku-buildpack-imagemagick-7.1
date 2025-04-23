@@ -1,0 +1,29 @@
+#!/bin/bash
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+IM_VERSION=7.1.1-28
+IM_PREFIX="$BUILD_DIR/vendor/imagemagick"
+
+echo "Installing ImageMagick $IM_VERSION..."
+
+mkdir -p /tmp/imagemagick
+cd /tmp/imagemagick
+
+curl -L "https://imagemagick.org/download/releases/ImageMagick-$IM_VERSION.tar.gz" -o im.tar.gz
+tar -xzf im.tar.gz
+cd ImageMagick-$IM_VERSION
+
+./configure --prefix=$IM_PREFIX --with-webp=yes --with-tiff=yes
+make -j4
+make install
+
+# Write profile.d script to set PATH and LD_LIBRARY_PATH
+mkdir -p "$BUILD_DIR/.profile.d"
+cat <<EOF > "$BUILD_DIR/.profile.d/imagemagick.sh"
+export PATH="$IM_PREFIX/bin:\$PATH"
+export LD_LIBRARY_PATH="$IM_PREFIX/lib:\$LD_LIBRARY_PATH"
+EOF
+
+echo "ImageMagick $IM_VERSION installed to $IM_PREFIX"
