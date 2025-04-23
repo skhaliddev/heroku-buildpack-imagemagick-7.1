@@ -3,7 +3,7 @@
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-IM_VERSION=7.1.1-28
+IM_VERSION=7.1.1-47
 IM_PREFIX="$BUILD_DIR/vendor/imagemagick"
 
 echo "Installing ImageMagick $IM_VERSION..."
